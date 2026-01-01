@@ -55,7 +55,7 @@ Thoth is a native macOS application that extracts Wikipedia articles and uses Cl
 ### Installation
 
 #### Option 1: Download Pre-built App (Coming Soon)
-1. Download the latest release from [Releases](https://github.com/yourusername/Thoth/releases)
+1. Download the latest release from [Releases](https://github.com/trodelli/Thoth/releases)
 2. Open the `.dmg` file
 3. Drag Thoth to your Applications folder
 4. Launch Thoth
@@ -64,7 +64,7 @@ Thoth is a native macOS application that extracts Wikipedia articles and uses Cl
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/Thoth.git
+   git clone https://github.com/trodelli/Thoth.git
    cd Thoth
    ```
 
@@ -230,7 +230,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Author**: theway.ink  
 **Website**: [theway.ink](https://theway.ink)  
-**Issues**: [GitHub Issues](https://github.com/yourusername/Thoth/issues)
+**Issues**: [GitHub Issues](https://github.com/trodelli/Thoth/issues)
 
 ## 🗺️ Roadmap
 
