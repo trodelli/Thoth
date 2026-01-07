@@ -73,6 +73,11 @@ struct CollapsibleSection<Content: View>: View {
                     .padding(.top, 8)
             }
         }
+        .onChange(of: isExpandedByDefault) { _, newValue in
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isExpanded = newValue
+            }
+        }
     }
 }
 

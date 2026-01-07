@@ -22,6 +22,7 @@ class InputViewModel: ObservableObject {
     
     init() {
         $urlInput
+            .debounce(for: .milliseconds(100), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 self?.validateURLs()
             }

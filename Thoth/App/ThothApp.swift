@@ -20,6 +20,13 @@ struct ThothApp: App {
         .windowStyle(.automatic)
         .defaultSize(width: 1400, height: 900)
         .commands {
+            // Replace default About menu item
+            CommandGroup(replacing: .appInfo) {
+                Button("About \(AppConstants.appName)") {
+                    AboutWindowController.shared.show()
+                }
+            }
+            
             // File menu commands
             CommandGroup(replacing: .newItem) {
                 Button("New Extraction") {
@@ -88,6 +95,45 @@ struct ThothApp: App {
                 .disabled(appState.extractions.isEmpty)
             }
         }
+    }
+}
+
+// MARK: - About Window Controller
+
+final class AboutWindowController {
+    static let shared = AboutWindowController()
+    private var aboutWindow: NSWindow?
+    
+    func show() {
+        // If window exists and is visible, just bring it to front
+        if let window = aboutWindow, window.isVisible {
+            window.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+            return
+        }
+        
+        // Create the SwiftUI view and host it
+        let aboutView = AboutView()
+        let hostingController = NSHostingController(rootView: aboutView)
+        
+        // Create window with appropriate style
+        let window = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 480, height: 480),
+            styleMask: [.titled, .closable],
+            backing: .buffered,
+            defer: false
+        )
+        
+        window.contentViewController = hostingController
+        window.title = "About \(AppConstants.appName)"
+        window.titlebarAppearsTransparent = true
+        window.titleVisibility = .hidden
+        window.isMovableByWindowBackground = true
+        window.center()
+        window.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+        
+        aboutWindow = window
     }
 }
 

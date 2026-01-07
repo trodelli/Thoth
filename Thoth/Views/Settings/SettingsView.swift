@@ -47,11 +47,6 @@ struct SettingsView: View {
                     .tabItem {
                         Label("API Keys", systemImage: "key")
                     }
-                
-                AboutView()
-                    .tabItem {
-                        Label("About", systemImage: "info.circle")
-                    }
             }
             .padding(.top, 8)
         }
@@ -120,41 +115,6 @@ struct GeneralSettingsView: View {
             }
             .padding()
         }
-    }
-}
-
-struct AboutView: View {
-    var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "book.closed.fill")
-                .font(.system(size: 60))
-                .foregroundColor(.accentColor)
-            
-            Text("Thoth")
-                .font(.title)
-                .fontWeight(.bold)
-            
-            Text("Version \(AppConstants.appVersion)")
-                .foregroundColor(.secondary)
-            
-            Text("Wikipedia Knowledge Extraction")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-            
-            Divider()
-                .padding(.horizontal, 40)
-            
-            VStack(spacing: 8) {
-                Text("Created by \(AppConstants.creatorName)")
-                    .font(.caption)
-                
-                Link(AppConstants.creatorURL.absoluteString, destination: AppConstants.creatorURL)
-                    .font(.caption)
-            }
-            
-            Spacer()
-        }
-        .padding()
     }
 }
 

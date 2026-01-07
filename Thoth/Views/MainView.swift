@@ -18,39 +18,39 @@ struct MainView: View {
                 .environmentObject(appState)
             
             NavigationSplitView {
-            // Sidebar
-            Sidebar()
-                .navigationSplitViewColumnWidth(min: 200, ideal: 220, max: 250)
-        } content: {
-            // Main content area
-            Group {
-                switch appState.selectedSection {
-                case .input:
-                    InputView()
-                case .extractions:
-                    ExtractionListView()
-                case .logs:
-                    LogView()
+                // Sidebar
+                Sidebar()
+                    .navigationSplitViewColumnWidth(min: 200, ideal: 220, max: 250)
+            } content: {
+                // Main content area
+                Group {
+                    switch appState.selectedSection {
+                    case .input:
+                        InputView()
+                    case .extractions:
+                        ExtractionListView()
+                    case .logs:
+                        LogView()
+                    }
+                }
+                .navigationSplitViewColumnWidth(min: 400, ideal: 500, max: 700)
+            } detail: {
+                // Detail panel
+                if let extraction = appState.selectedExtraction {
+                    ExtractionDetailView(extraction: extraction)
+                } else {
+                    EmptyStateView(
+                        icon: "doc.text.magnifyingglass",
+                        title: "No Article Selected",
+                        message: "Select an extraction from the list to view details"
+                    )
                 }
             }
-            .navigationSplitViewColumnWidth(min: 400, ideal: 500, max: 700)
-        } detail: {
-            // Detail panel
-            if let extraction = appState.selectedExtraction {
-                ExtractionDetailView(extraction: extraction)
-            } else {
-                EmptyStateView(
-                    icon: "doc.text.magnifyingglass",
-                    title: "No Article Selected",
-                    message: "Select an extraction from the list to view details"
-                )
+            .environmentObject(appState)
+            .sheet(isPresented: $appState.showSettings) {
+                SettingsView()
+                    .environmentObject(appState)
             }
-        }
-        .environmentObject(appState)
-        .sheet(isPresented: $appState.showSettings) {
-            SettingsView()
-                .environmentObject(appState)
-        }
         }
     }
 }

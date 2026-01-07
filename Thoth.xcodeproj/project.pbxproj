@@ -33,52 +33,9 @@
 		7133AE562F0567BB00A1F437 /* ThothUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ThothUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		71E6F55B2F056C6A00F3EAFC /* Exceptions for "Thoth" folder in "ThothTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Configuration/AppConstants.swift,
-				Models/CostEstimate.swift,
-				Models/Enums/ArticleType.swift,
-				Models/Enums/DatePrecision.swift,
-				Models/Enums/LocationType.swift,
-				Models/Errors/ThothError.swift,
-				Models/ExtractionProgress.swift,
-				Models/ThothExtraction.swift,
-				Utilities/CostCalculator.swift,
-				Utilities/KeychainManager.swift,
-				Utilities/Logger.swift,
-				Utilities/URLValidator.swift,
-			);
-			target = 7133AE4B2F0567BB00A1F437 /* ThothTests */;
-		};
-		71E6F55C2F056C6A00F3EAFC /* Exceptions for "Thoth" folder in "ThothUITests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Configuration/AppConstants.swift,
-				Models/CostEstimate.swift,
-				Models/Enums/ArticleType.swift,
-				Models/Enums/DatePrecision.swift,
-				Models/Enums/LocationType.swift,
-				Models/Errors/ThothError.swift,
-				Models/ExtractionProgress.swift,
-				Models/ThothExtraction.swift,
-				Utilities/CostCalculator.swift,
-				Utilities/KeychainManager.swift,
-				Utilities/Logger.swift,
-				Utilities/URLValidator.swift,
-			);
-			target = 7133AE552F0567BB00A1F437 /* ThothUITests */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7133AE412F0567BA00A1F437 /* Thoth */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				71E6F55B2F056C6A00F3EAFC /* Exceptions for "Thoth" folder in "ThothTests" target */,
-				71E6F55C2F056C6A00F3EAFC /* Exceptions for "Thoth" folder in "ThothUITests" target */,
-			);
 			path = Thoth;
 			sourceTree = "<group>";
 		};

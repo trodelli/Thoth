@@ -31,7 +31,6 @@ class AppState: ObservableObject {
     @Published var selectedSection: NavigationSection = .input
     @Published var selectedExtraction: ThothExtraction?
     @Published var extractions: [ThothExtraction] = []
-    @Published var showAbout = false
     @Published var showSettings = false
     @Published var isExtracting = false
     

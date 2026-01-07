@@ -124,13 +124,13 @@ struct ExtractionDetailView: View {
             // Expand/Collapse all
             HStack {
                 Button(action: { expandAll = true }) {
-                    Label("Expand All", systemImage: "arrow.down.right.and.arrow.up.left")
+                    Label("Expand All", systemImage: "rectangle.expand.vertical")
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
                 
                 Button(action: { expandAll = false }) {
-                    Label("Collapse All", systemImage: "arrow.up.left.and.arrow.down.right")
+                    Label("Collapse All", systemImage: "rectangle.compress.vertical")
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)

@@ -31,13 +31,6 @@ struct Sidebar: View {
                 .frame(height: 8)
         }
         .navigationTitle("Thoth")
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                Button(action: { appState.showAbout = true }) {
-                    Image(systemName: "info.circle")
-                }
-            }
-        }
     }
 }
 
