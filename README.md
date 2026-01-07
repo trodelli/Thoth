@@ -1,255 +1,269 @@
-# Thoth
+<p align="center">
+  <img src="Icon/Thoth%20Icon%20256x256.png" alt="Thoth App Icon" width="128" height="128">
+</p>
 
-**AI-Powered Wikipedia Article Extraction & Summarization for macOS**
+<h1 align="center">Thoth</h1>
 
-Thoth is a native macOS application that extracts Wikipedia articles and uses Claude AI to create intelligent summaries, extract key facts, and provide structured analysis. Perfect for researchers, students, and anyone who needs to process Wikipedia content efficiently.
+<p align="center">
+  <strong>Transform Wikipedia articles into structured, intelligent extractions</strong>
+</p>
 
-![Thoth Banner](screenshots/banner.png)
+<p align="center">
+  A native macOS application that extracts Wikipedia articles and uses Claude AI to create intelligent summaries, extract key facts, and provide structured analysis.
+</p>
 
-## ✨ Features
+<p align="center">
+  <img src="https://img.shields.io/badge/macOS-14.0+-blue?style=flat-square" alt="macOS 14+">
+  <img src="https://img.shields.io/badge/Swift-5.9+-orange?style=flat-square" alt="Swift 5.9+">
+  <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="MIT License">
+  <img src="https://img.shields.io/badge/Version-1.0.1-purple?style=flat-square" alt="Version 1.0.1">
+</p>
 
-### Core Functionality
-- **Wikipedia Extraction**: Extract any Wikipedia article by URL or article title
-- **AI-Powered Summarization**: Compress articles to 60% of original length while preserving key information
-- **Batch Processing**: Process up to 200 articles at once
-- **Smart Article Classification**: Automatically categorizes articles (Person, Place, Event, Concept, etc.)
-- **Structured Data Extraction**: Automatically extracts:
-  - Key facts and statistics
-  - Important dates and events
-  - Geographic locations
-  - Related topics and categories
-  - Tables and infoboxes
+<p align="center">
+  <img src="Screenshots/Main%20Interface.png" alt="Thoth Main Interface" width="800">
+</p>
 
-### Export Options
-- **Multiple Formats**: Export to Markdown or JSON
-- **Batch Export**: Export all extractions to individual files
-- **Session Export**: Combine multiple articles into a single document
-- **Cost Tracking**: Monitor AI API usage and costs
+---
 
-### User Experience
-- **Progress Tracking**: Real-time progress indicators for each extraction step
-- **Global Progress Banner**: Always-visible status bar showing current work
-- **Recent Articles**: Quick access to recently extracted articles
-- **Keyboard Shortcuts**: Full keyboard control for power users
-- **Copy to Clipboard**: One-click copy of any section
+## ✨ What's New in v1.0.1
 
-## 📸 Screenshots
+- 🪟 **Custom About Window** — Beautiful About screen with app description and attribution
+- 🔧 **Fixed Expand/Collapse** — Buttons now work correctly in extraction detail view
+- 📐 **Improved Layout** — Content properly adjusts when progress banner appears
+- 🧹 **Code Quality** — Reduced console warnings and cleaned up codebase
 
-![Main Interface](screenshots/main-interface.png)
-*Main extraction interface with AI enhancement options*
+---
 
-![Extraction Details](screenshots/extraction-detail.png)
-*Detailed view of extracted article with collapsible sections*
+## Why Thoth?
 
-![Progress Tracking](screenshots/progress-tracking.png)
-*Real-time progress tracking for AI enhancement steps*
+**Thoth** brings AI-powered Wikipedia extraction to your Mac. Enter any Wikipedia URL or article title, and Thoth extracts clean, structured content using Claude AI's powerful language understanding. Get intelligent summaries, key facts, important dates, and geographic locations—all in one click.
 
-## 🚀 Getting Started
+- 📚 **Smart Extraction** — Extract any Wikipedia article by URL or title
+- 🧠 **AI Summarization** — Compress articles to 60% while preserving key information
+- 📦 **Batch Processing** — Queue up to 200 articles and process them all at once
+- 📊 **Structured Data** — Automatically extract facts, dates, locations, and topics
+- 💰 **Cost Transparent** — Know exactly what you'll pay before processing
+- 🔒 **Private & Secure** — API keys stored in your Mac's Keychain
 
-### Requirements
+---
 
-- **macOS**: 14.0 (Sonoma) or later
-- **Xcode**: 15.0 or later (for building from source)
-- **Anthropic API Key**: Required for AI features ([Get one here](https://console.anthropic.com))
+## Screenshots
 
-### Installation
+|  |  |
+| --- | --- |
+| **Input** Add Wikipedia URLs and configure options | **Extraction** View extracted content with collapsible sections |
+| ![Input View](Screenshots/Main%20Interface.png) | ![Extraction View](Screenshots/Extraction%20Example.png) |
 
-#### Option 1: Download Pre-built App (Coming Soon)
-1. Download the latest release from [Releases](https://github.com/trodelli/Thoth/releases)
-2. Open the `.dmg` file
-3. Drag Thoth to your Applications folder
-4. Launch Thoth
+---
 
-#### Option 2: Build from Source
+## Getting Started
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/trodelli/Thoth.git
-   cd Thoth
-   ```
+### 1. Download & Install
 
-2. **Open in Xcode**
-   ```bash
-   open Thoth.xcodeproj
-   ```
+Download the latest release from the [Releases](https://github.com/trodelli/Thoth/releases) page:
 
-3. **Build and Run**
-   - Select "Thoth" scheme
-   - Press `⌘R` to build and run
-   - Or: Product → Run
+1. Download `Thoth-1.0.1.dmg`
+2. Open the DMG and drag **Thoth** to your Applications folder
+3. Launch Thoth
 
-### Setup
+> **First Launch Note:** macOS may show a security warning for apps downloaded outside the App Store. Go to **System Settings → Privacy & Security** and click **"Open Anyway"**.
 
-1. **Launch Thoth**
+### 2. Get Your API Key
 
-2. **Add Your API Key**
-   - Go to Settings (⌘,)
-   - Enter your Anthropic API key
-   - Enable "AI Enhancement"
+Thoth uses [Claude AI](https://www.anthropic.com/claude) by Anthropic for intelligent extraction:
 
-3. **Start Extracting!**
-   - Enter a Wikipedia URL or article title
-   - Click "Extract"
-   - Watch the magic happen ✨
+1. Create an account at [console.anthropic.com](https://console.anthropic.com)
+2. Navigate to **API Keys** and create a new key
+3. Copy the key and paste it into Thoth Settings (⌘,)
 
-## 📖 Usage Guide
+### 3. Extract Your First Article
 
-### Basic Extraction
+1. **Enter a URL or title** — `https://en.wikipedia.org/wiki/Confucius` or just `Confucius`
+2. **Enable AI Enhancement** — Toggle on for intelligent summarization
+3. **Click Extract** — Watch real-time progress as your article is processed
+4. **Browse results** — Expand sections to see summaries, facts, dates, and more
+5. **Export** — Save as Markdown or JSON
 
-1. **Enter URL or Article Title**
-   - Full URL: `https://en.wikipedia.org/wiki/Confucius`
-   - Or just: `Confucius`
+---
 
-2. **Choose Options**
-   - **Summary Ratio**: How much to compress (default: 60%)
-   - **AI Enhancement**: Enable for intelligent summarization
+## Features
 
-3. **Click Extract**
-   - Watch real-time progress
-   - Article appears in Extractions tab when done
+### AI-Powered Extraction
+
+Thoth uses Claude Sonnet 4 to intelligently process Wikipedia articles:
+
+- **Smart Summarization** — Compress to 40-70% of original length
+- **Article Classification** — Automatically categorize (Person, Place, Event, etc.)
+- **Key Facts** — Extract the most important information
+- **Temporal Context** — Identify important dates and events
+- **Geographic Context** — Extract locations with modern equivalents
+- **Related Topics** — Discover connected subjects
 
 ### Batch Processing
 
-1. Enter multiple URLs (one per line)
-2. Click "Extract"
-3. All articles process sequentially
-4. Progress shown for each article
+Process multiple articles efficiently:
 
-### Exporting
+- Add up to 200 URLs at once
+- Real-time progress tracking for each article
+- Global progress banner shows overall status
+- Rate limiting respects Wikipedia's servers
 
-**Single Article:**
-- Open extraction detail
-- Click "Export" button (⌘E)
-- Choose format and location
+### Export Options
 
-**All Articles:**
-- In Extractions tab, click menu (•••)
-- Choose:
-  - "Export All to Single File" (⌘⌥E)
-  - "Export All to Folder" (⌘⇧E)
+| Format | Use Case |
+| --- | --- |
+| Markdown | Perfect for notes, Obsidian, or documentation |
+| JSON | Ideal for data processing or integration |
 
-### Keyboard Shortcuts
+Export options:
+- **Single Article** — Export one extraction (⌘E)
+- **All to Folder** — Export each as separate file (⌘⇧E)
+- **Session to File** — Combine all into one document (⌘⌥E)
 
-- `⌘N` - New Extraction
-- `⌘1` - Input Tab
-- `⌘2` - Extractions Tab
-- `⌘3` - Activity Log Tab
-- `⌘,` - Settings
-- `⌘E` - Export Current
-- `⌘⇧E` - Export All to Folder
-- `⌘⌥E` - Export Session to File
-- `⌘K` - Clear All
+---
 
-## 🏗️ Architecture
+## Pricing
 
-Thoth is built with modern Swift and SwiftUI:
+Thoth itself is **free and open source**. You only pay for Claude API usage:
 
-### Core Components
+| Articles | Estimated Cost |
+| --- | --- |
+| 1 | ~$0.02-0.05 |
+| 10 | ~$0.20-0.50 |
+| 100 | ~$2.00-5.00 |
 
-- **ExtractionEngine**: Orchestrates Wikipedia fetching and AI enhancement
-- **WikipediaService**: HTTP client for Wikipedia API
-- **WikipediaParser**: HTML parsing and content extraction
-- **AIEnhancementService**: Claude AI integration
-- **ExportService**: Multi-format export functionality
+Cost varies by article length. Built-in cost tracking shows your session total.
 
-### Tech Stack
+---
 
-- **Language**: Swift 5.9
-- **Framework**: SwiftUI
-- **Architecture**: MVVM
-- **AI**: Anthropic Claude Sonnet 4
-- **Networking**: URLSession
-- **HTML Parsing**: Custom parser using Foundation
+## Keyboard Shortcuts
 
-## 💰 Cost Information
+| Action | Shortcut |
+| --- | --- |
+| New Extraction | `⌘N` |
+| Input Tab | `⌘1` |
+| Extractions Tab | `⌘2` |
+| Activity Log Tab | `⌘3` |
+| Settings | `⌘,` |
+| Export Current | `⌘E` |
+| Export All to Folder | `⌘⇧E` |
+| Export Session | `⌘⌥E` |
+| Clear All | `⌘K` |
 
-- **AI Enhancement**: Uses Claude Sonnet 4
-- **Pricing**: ~$0.02-0.05 per article (varies by length)
-- **Cost Tracking**: Built-in session cost monitoring
-- **No Subscription**: You only pay for API usage
+---
 
-## 🛠️ Development
+## Building from Source
 
-### Project Structure
+Prefer to build it yourself? Easy:
+
+```bash
+git clone https://github.com/trodelli/Thoth.git
+cd Thoth
+open Thoth.xcodeproj
+```
+
+Then press `⌘R` in Xcode to build and run.
+
+**Requirements:**
+- macOS 14.0 (Sonoma) or later
+- Xcode 15.0+
+
+---
+
+## How It Works
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│  Wikipedia  │ ──▶ │   Parse &   │ ──▶ │  Claude AI  │
+│     URL     │     │   Extract   │     │  Analysis   │
+└─────────────┘     └─────────────┘     └──────┬──────┘
+                                               │
+┌─────────────┐     ┌─────────────┐            │
+│   Export    │ ◀── │  Structured │ ◀──────────┘
+│   MD/JSON   │     │    Data     │     Summary, Facts,
+└─────────────┘     └─────────────┘     Dates, Locations
+```
+
+1. **Input** — Enter Wikipedia URLs or article titles
+2. **Fetch** — Download article content from Wikipedia API
+3. **Parse** — Extract HTML content and structure
+4. **Analyze** — Claude AI generates summaries and extracts data
+5. **Display** — Browse results in collapsible sections
+6. **Export** — Save to Markdown or JSON
+
+---
+
+## Tech Stack
+
+| Component | Technology |
+| --- | --- |
+| UI Framework | SwiftUI |
+| Architecture | MVVM |
+| AI | Claude Sonnet 4 (Anthropic) |
+| Networking | URLSession + async/await |
+| Security | macOS Keychain Services |
+| HTML Parsing | Custom Swift parser |
+
+---
+
+## Project Structure
 
 ```
 Thoth/
 ├── App/                    # App entry point
-├── Configuration/          # Constants and configuration
+├── Configuration/          # Constants and settings
 ├── Models/                 # Data models
-├── Services/              # Business logic
-│   ├── AI/               # Claude integration
-│   ├── Extraction/       # Wikipedia extraction
-│   ├── Export/           # Export functionality
-│   └── Wikipedia/        # Wikipedia API
-├── Utilities/            # Helper utilities
-├── ViewModels/           # State management
-└── Views/                # SwiftUI views
-    ├── Components/       # Reusable components
-    ├── Extraction/       # Extraction views
-    ├── Input/           # Input views
-    ├── Logs/            # Activity log
-    └── Settings/        # Settings views
+├── Services/
+│   ├── AI/                # Claude integration
+│   ├── Extraction/        # Extraction engine
+│   ├── Export/            # Export functionality
+│   └── Wikipedia/         # Wikipedia API
+├── Utilities/             # Helpers
+├── ViewModels/            # State management
+└── Views/
+    ├── Components/        # Reusable UI
+    ├── Extraction/        # Extraction views
+    ├── Input/             # Input view
+    ├── Logs/              # Activity log
+    └── Settings/          # Settings view
 ```
-
-### Building
-
-```bash
-# Build for development
-xcodebuild -scheme Thoth -configuration Debug
-
-# Build for release
-xcodebuild -scheme Thoth -configuration Release
-
-# Run tests (when available)
-xcodebuild test -scheme Thoth
-```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-### Development Guidelines
-
-1. Follow Swift style guidelines
-2. Add comments for complex logic
-3. Test thoroughly before submitting
-4. Update documentation as needed
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Built with [Claude AI](https://www.anthropic.com/claude) by Anthropic
-- Wikipedia content via [Wikimedia API](https://www.mediawiki.org/wiki/API:Main_page)
-- Developed with assistance from Claude Code
-
-## 📧 Contact
-
-**Author**: theway.ink  
-**Website**: [theway.ink](https://theway.ink)  
-**Issues**: [GitHub Issues](https://github.com/trodelli/Thoth/issues)
-
-## 🗺️ Roadmap
-
-### v1.1 (Planned)
-- [ ] Search within extractions
-- [ ] Data persistence between sessions
-- [ ] Custom extraction templates
-- [ ] Multi-language Wikipedia support
-- [ ] PDF export format
-- [ ] Obsidian/Notion integration
-
-### v2.0 (Future)
-- [ ] iOS/iPadOS versions
-- [ ] Collaborative features
-- [ ] Custom AI prompts
-- [ ] Parallel processing
 
 ---
 
-**Made with ❤️ using Swift and SwiftUI**
+## Contributing
 
-*Thoth - Named after the ancient Egyptian god of knowledge and writing*
+Contributions are welcome! Here's how:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-idea`)
+3. Commit your changes (`git commit -m 'Add amazing idea'`)
+4. Push to the branch (`git push origin feature/amazing-idea`)
+5. Open a Pull Request
+
+---
+
+## License
+
+MIT License — see [LICENSE](LICENSE) for details.
+
+Free to use, modify, and distribute.
+
+---
+
+## Acknowledgments
+
+- [Anthropic](https://www.anthropic.com) for Claude AI
+- [Wikipedia](https://www.wikipedia.org) via the Wikimedia API
+- Named after [Thoth](https://en.wikipedia.org/wiki/Thoth) — the ancient Egyptian god of knowledge and writing
+
+---
+
+<p align="center">
+  <strong>DESIGNED BY THEWAY.INK · BUILT WITH AI · MADE IN MARSEILLE</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/trodelli/Thoth/releases">Download</a> ·
+  <a href="https://github.com/trodelli/Thoth/issues">Report Bug</a> ·
+  <a href="https://github.com/trodelli/Thoth/issues">Request Feature</a>
+</p>
