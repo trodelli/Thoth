@@ -28,15 +28,29 @@ struct ExtractionListView: View {
                 
                 Spacer()
                 
+                // Sort Toggle
+                if !appState.extractions.isEmpty {
+                    Button(action: { appState.sortOldestFirst.toggle() }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: appState.sortOldestFirst ? "arrow.up.circle.fill" : "arrow.down.circle.fill")
+                            Text(appState.sortOldestFirst ? "Oldest" : "Newest")
+                                .font(.caption)
+                        }
+                        .foregroundColor(.blue)
+                    }
+                    .buttonStyle(.plain)
+                    .help(appState.sortOldestFirst ? "Sorted: Oldest first" : "Sorted: Newest first")
+                }
+                
                 // Export Menu
                 if !appState.extractions.isEmpty {
                     Menu {
                         Button(action: { showingSessionExportOptions = true }) {
-                            Label("Export All to Single File...", systemImage: "doc.badge.arrow.up")
+                            Label("Export All to Single File...", systemImage: "doc.on.doc")
                         }
                         
                         Button(action: exportAllToFolder) {
-                            Label("Export All to Folder...", systemImage: "folder.badge.arrow.up")
+                            Label("Export All to Folder...", systemImage: "folder")
                         }
                         
                         Divider()
@@ -63,7 +77,7 @@ struct ExtractionListView: View {
                     message: "Extracted articles will appear here"
                 )
             } else {
-                List(appState.extractions, id: \.metadata.extractedAt, selection: $appState.selectedExtraction) { extraction in
+                List(appState.sortedExtractions, id: \.metadata.extractedAt, selection: $appState.selectedExtraction) { extraction in
                     ExtractionRowView(extraction: extraction)
                         .tag(extraction)
                         .contextMenu {
@@ -180,7 +194,7 @@ struct ExtractionListView: View {
             // Export Button
             Button(action: exportSessionToSingleFile) {
                 HStack {
-                    Image(systemName: "doc.badge.arrow.up")
+                    Image(systemName: "square.and.arrow.up")
                     Text("Export to Single File")
                 }
                 .frame(maxWidth: .infinity)
@@ -236,7 +250,7 @@ struct ExtractionListView: View {
             
             do {
                 let exportedURLs = try appState.exportService.exportBatch(
-                    appState.extractions,
+                    appState.sortedExtractions,
                     to: url,
                     format: format
                 )
@@ -260,7 +274,7 @@ struct ExtractionListView: View {
             
             do {
                 try appState.exportService.sessionExport(
-                    extractions: appState.extractions,
+                    extractions: appState.sortedExtractions,
                     to: url,
                     format: selectedSessionFormat
                 )

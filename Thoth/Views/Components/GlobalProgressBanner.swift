@@ -8,6 +8,9 @@
 
 import SwiftUI
 
+// Note: The banner is now implemented directly in MainView using safeAreaInset
+// This file is kept for reference and potential future use
+
 struct GlobalProgressBanner: View {
     @EnvironmentObject var appState: AppState
     
@@ -55,7 +58,8 @@ struct GlobalProgressBanner: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .background(Color.blue.opacity(0.1))
+            .background(Color.blue.opacity(0.15))
+            .background(.ultraThinMaterial)
         }
     }
     

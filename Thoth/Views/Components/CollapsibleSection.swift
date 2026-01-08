@@ -74,8 +74,11 @@ struct CollapsibleSection<Content: View>: View {
             }
         }
         .onChange(of: isExpandedByDefault) { _, newValue in
-            withAnimation(.easeInOut(duration: 0.2)) {
-                isExpanded = newValue
+            // Defer state change to avoid "Publishing changes from within view updates" warning
+            Task { @MainActor in
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isExpanded = newValue
+                }
             }
         }
     }

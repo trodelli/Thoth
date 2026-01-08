@@ -55,6 +55,15 @@ class AppState: ObservableObject {
     @AppStorage("requestDelay") var requestDelay: Double = AppConstants.Defaults.requestDelay
     @AppStorage("aiEnabled") var aiEnabled: Bool = false
     @AppStorage("exportFormat") var exportFormat: String = ExportFormat.markdown.rawValue
+    @AppStorage("sortOldestFirst") var sortOldestFirst: Bool = false
+    
+    // Computed property for sorted extractions
+    var sortedExtractions: [ThothExtraction] {
+        if sortOldestFirst {
+            return extractions.reversed()
+        }
+        return extractions
+    }
     
     func addExtraction(_ extraction: ThothExtraction) {
         extractions.insert(extraction, at: 0)
