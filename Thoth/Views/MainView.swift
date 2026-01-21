@@ -9,16 +9,16 @@
 import SwiftUI
 
 struct MainView: View {
-    @StateObject private var appState = AppState()
+    @EnvironmentObject var appState: AppState
+    @StateObject private var searchViewModel = SearchViewModel()
     
     var body: some View {
         VStack(spacing: 0) {
             // Global progress banner at the very top
-            // Conditional is here (not inside the banner) for proper view identity
             if appState.isExtracting, let progress = appState.currentProgress {
                 GlobalProgressBannerContent(progress: progress)
                     .environmentObject(appState)
-                    .id("progress-banner") // Stable identity
+                    .id("progress-banner")
             }
             
             NavigationSplitView {
@@ -29,6 +29,8 @@ struct MainView: View {
                 // Main content area
                 Group {
                     switch appState.selectedSection {
+                    case .search:
+                        SearchView(viewModel: searchViewModel)
                     case .input:
                         InputView()
                     case .extractions:
@@ -39,22 +41,36 @@ struct MainView: View {
                 }
                 .navigationSplitViewColumnWidth(min: 400, ideal: 500, max: 700)
             } detail: {
-                // Detail panel
-                if let extraction = appState.selectedExtraction {
-                    ExtractionDetailView(extraction: extraction)
-                } else {
-                    EmptyStateView(
-                        icon: "doc.text.magnifyingglass",
-                        title: "No Article Selected",
-                        message: "Select an extraction from the list to view details"
-                    )
-                }
+                // Detail panel - context-aware based on selected section
+                detailView
             }
             .environmentObject(appState)
         }
         .sheet(isPresented: $appState.showSettings) {
             SettingsView()
                 .environmentObject(appState)
+        }
+    }
+    
+    @ViewBuilder
+    private var detailView: some View {
+        switch appState.selectedSection {
+        case .search:
+            // Show search detail panel
+            SearchDetailPanel(viewModel: searchViewModel)
+                .environmentObject(appState)
+            
+        case .input, .extractions, .logs:
+            // Show extraction detail or empty state
+            if let extraction = appState.selectedExtraction {
+                ExtractionDetailView(extraction: extraction)
+            } else {
+                EmptyStateView(
+                    icon: "doc.text.magnifyingglass",
+                    title: "No Article Selected",
+                    message: "Select an extraction from the list to view details"
+                )
+            }
         }
     }
 }
@@ -66,11 +82,9 @@ struct GlobalProgressBannerContent: View {
     
     var body: some View {
         HStack(spacing: 12) {
-            // Progress indicator
             ProgressView()
                 .scaleEffect(0.8)
             
-            // Status text
             Text("Working: \(appState.currentExtractionIndex + 1) of \(appState.validURLCount)")
                 .font(.body)
                 .fontWeight(.medium)
@@ -78,7 +92,6 @@ struct GlobalProgressBannerContent: View {
             Text("•")
                 .foregroundColor(.secondary)
             
-            // Current article
             if let currentURL = appState.currentURL {
                 Text(currentURL.lastPathComponent.replacingOccurrences(of: "_", with: " "))
                     .font(.body)
@@ -89,7 +102,6 @@ struct GlobalProgressBannerContent: View {
             Text("•")
                 .foregroundColor(.secondary)
             
-            // Time estimate
             if progress.estimatedTimeRemaining > 0 {
                 Text("~\(Int(progress.estimatedTimeRemaining))s remaining")
                     .font(.body)
@@ -98,7 +110,6 @@ struct GlobalProgressBannerContent: View {
             
             Spacer()
             
-            // Cancel button
             Button(action: { appState.cancelExtraction() }) {
                 Text("Cancel")
                     .foregroundColor(.red)
@@ -108,9 +119,8 @@ struct GlobalProgressBannerContent: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .frame(maxWidth: .infinity)
-        .background(Color(NSColor.controlBackgroundColor)) // Opaque system background
+        .background(Color(NSColor.controlBackgroundColor))
         .overlay(
-            // Subtle bottom border
             Rectangle()
                 .frame(height: 1)
                 .foregroundColor(Color.primary.opacity(0.1)),
@@ -121,4 +131,5 @@ struct GlobalProgressBannerContent: View {
 
 #Preview {
     MainView()
+        .environmentObject(AppState())
 }

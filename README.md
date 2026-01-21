@@ -5,41 +5,42 @@
 <h1 align="center">Thoth</h1>
 
 <p align="center">
-  <strong>Transform Wikipedia articles into structured, intelligent extractions</strong>
+  <strong>AI-Powered Wikipedia Discovery & Extraction</strong>
 </p>
 
 <p align="center">
-  A native macOS application that extracts Wikipedia articles and uses Claude AI to create intelligent summaries, extract key facts, and provide structured analysis.
+  A native macOS application that uses Claude AI to discover, extract, and transform Wikipedia articles into structured, intelligent knowledge.
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/macOS-14.0+-blue?style=flat-square" alt="macOS 14+">
   <img src="https://img.shields.io/badge/Swift-5.9+-orange?style=flat-square" alt="Swift 5.9+">
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="MIT License">
-  <img src="https://img.shields.io/badge/Version-1.0.1-purple?style=flat-square" alt="Version 1.0.1">
-</p>
-
-<p align="center">
-  <img src="Screenshots/Main%20Interface.png" alt="Thoth Main Interface" width="800">
+  <img src="https://img.shields.io/badge/Version-2.0.0-purple?style=flat-square" alt="Version 2.0.0">
 </p>
 
 ---
 
-## ✨ What's New in v1.0.1
+## ✨ What's New in v2.0.0
 
-- 🪟 **Custom About Window** — Beautiful About screen with app description and attribution
-- 🔧 **Fixed Expand/Collapse** — Buttons now work correctly in extraction detail view
-- 📐 **Improved Layout** — Content properly adjusts when progress banner appears
-- 🧹 **Code Quality** — Reduced console warnings and cleaned up codebase
+### 🔍 AI-Powered Search
+Discover Wikipedia articles using natural language. Search for "ancient Rome" or describe what you're looking for — Claude AI finds relevant articles automatically.
+
+### 🎓 Welcome Wizard
+New users are greeted with a beautiful 6-slide onboarding experience that introduces Thoth's capabilities and guides them through setup.
+
+### 🎨 Refined Interface
+Polished UI with standardized navigation, improved badges, and seamless integration between Search and Extraction workflows.
 
 ---
 
 ## Why Thoth?
 
-**Thoth** brings AI-powered Wikipedia extraction to your Mac. Enter any Wikipedia URL or article title, and Thoth extracts clean, structured content using Claude AI's powerful language understanding. Get intelligent summaries, key facts, important dates, and geographic locations—all in one click.
+**Thoth** brings AI-powered Wikipedia discovery and extraction to your Mac. Whether you're building a knowledge base, researching a topic, or creating training data — Thoth helps you find, extract, and export Wikipedia content intelligently.
 
+- 🔍 **AI Discovery** — Find relevant articles using natural language queries
 - 📚 **Smart Extraction** — Extract any Wikipedia article by URL or title
-- 🧠 **AI Summarization** — Compress articles to 60% while preserving key information
+- 🧠 **AI Summarization** — Compress articles while preserving key information
 - 📦 **Batch Processing** — Queue up to 200 articles and process them all at once
 - 📊 **Structured Data** — Automatically extract facts, dates, locations, and topics
 - 💰 **Cost Transparent** — Know exactly what you'll pay before processing
@@ -49,10 +50,38 @@
 
 ## Screenshots
 
-|  |  |
-| --- | --- |
-| **Input** Add Wikipedia URLs and configure options | **Extraction** View extracted content with collapsible sections |
-| ![Input View](Screenshots/Main%20Interface.png) | ![Extraction View](Screenshots/Extraction%20Example.png) |
+<table>
+  <tr>
+    <td width="50%">
+      <strong>Search</strong><br>
+      <em>Discover articles with AI-powered natural language search</em><br><br>
+      <img src="Screenshots/Search.jpg" alt="Search View">
+    </td>
+    <td width="50%">
+      <strong>Input</strong><br>
+      <em>Add Wikipedia URLs and configure extraction options</em><br><br>
+      <img src="Screenshots/Input.jpg" alt="Input View">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <strong>Extraction</strong><br>
+      <em>View extracted content with summaries, facts, and more</em><br><br>
+      <img src="Screenshots/Extraction.jpg" alt="Extraction View">
+    </td>
+    <td width="50%">
+      <strong>Settings</strong><br>
+      <em>Configure preferences and access the Welcome Tour</em><br><br>
+      <img src="Screenshots/Settings.jpg" alt="Settings View">
+    </td>
+  </tr>
+</table>
+
+<p align="center">
+  <strong>Markdown Export</strong><br>
+  <em>Clean, structured output ready for notes, documentation, or AI training</em><br><br>
+  <img src="Screenshots/Sample%20Extraction.jpg" alt="Sample Extraction" width="800">
+</p>
 
 ---
 
@@ -62,33 +91,55 @@
 
 Download the latest release from the [Releases](https://github.com/trodelli/Thoth/releases) page:
 
-1. Download `Thoth-1.0.1.dmg`
+1. Download `Thoth-2.0.0.dmg`
 2. Open the DMG and drag **Thoth** to your Applications folder
-3. Launch Thoth
+3. Launch Thoth — the Welcome Wizard will guide you through setup
 
 > **First Launch Note:** macOS may show a security warning for apps downloaded outside the App Store. Go to **System Settings → Privacy & Security** and click **"Open Anyway"**.
 
 ### 2. Get Your API Key
 
-Thoth uses [Claude AI](https://www.anthropic.com/claude) by Anthropic for intelligent extraction:
+Thoth uses [Claude AI](https://www.anthropic.com/claude) by Anthropic for intelligent search and extraction:
 
-1. Create an account at [console.anthropic.com](https://console.anthropic.com)
-2. Navigate to **API Keys** and create a new key
-3. Copy the key and paste it into Thoth Settings (⌘,)
+1. Visit the [Anthropic Console](https://console.anthropic.com/settings/keys) (link also available in Settings)
+2. Create an account and generate an API key
+3. Paste the key into Thoth Settings → API Keys
 
-### 3. Extract Your First Article
+### 3. Discover & Extract
 
-1. **Enter a URL or title** — `https://en.wikipedia.org/wiki/Confucius` or just `Confucius`
-2. **Enable AI Enhancement** — Toggle on for intelligent summarization
-3. **Click Extract** — Watch real-time progress as your article is processed
-4. **Browse results** — Expand sections to see summaries, facts, dates, and more
-5. **Export** — Save as Markdown or JSON
+**Option A: Search for Articles**
+1. Go to the **Search** tab
+2. Enter keywords or describe what you're looking for
+3. Review AI-curated results with descriptions
+4. Select articles and click **"Add to Input"**
+5. Extract them all at once
+
+**Option B: Direct Extraction**
+1. Go to the **Input** tab
+2. Enter a URL or title — `https://en.wikipedia.org/wiki/Confucius` or just `Confucius`
+3. Enable **AI Enhancement** for intelligent summarization
+4. Click **Extract**
 
 ---
 
 ## Features
 
-### AI-Powered Extraction
+### 🔍 AI-Powered Search
+
+Thoth's intelligent search uses Claude AI to discover Wikipedia articles:
+
+- **Natural Language** — Search by keyword or describe what you need
+- **Article Validation** — Every result is verified to exist on Wikipedia
+- **Rich Previews** — See descriptions and preview content before extracting
+- **Batch Selection** — Select multiple articles and add them all to extraction
+- **Export Results** — Save search results as TXT, Markdown, or JSON
+- **Recent Searches** — Quick access to previous searches in the sidebar
+
+<p align="center">
+  <img src="Screenshots/Search.jpg" alt="Search Feature" width="700">
+</p>
+
+### 📚 AI-Powered Extraction
 
 Thoth uses Claude Sonnet 4 to intelligently process Wikipedia articles:
 
@@ -99,7 +150,7 @@ Thoth uses Claude Sonnet 4 to intelligently process Wikipedia articles:
 - **Geographic Context** — Extract locations with modern equivalents
 - **Related Topics** — Discover connected subjects
 
-### Batch Processing
+### 📦 Batch Processing
 
 Process multiple articles efficiently:
 
@@ -107,18 +158,28 @@ Process multiple articles efficiently:
 - Real-time progress tracking for each article
 - Global progress banner shows overall status
 - Rate limiting respects Wikipedia's servers
+- Session cost tracking
 
-### Export Options
+### 📤 Export Options
 
 | Format | Use Case |
 | --- | --- |
-| Markdown | Perfect for notes, Obsidian, or documentation |
-| JSON | Ideal for data processing or integration |
+| **Markdown** | Perfect for notes, Obsidian, or documentation |
+| **JSON** | Ideal for data processing or LLM training |
 
 Export options:
 - **Single Article** — Export one extraction (⌘E)
 - **All to Folder** — Export each as separate file (⌘⇧E)
 - **Session to File** — Combine all into one document (⌘⌥E)
+
+### 🎓 Welcome Wizard
+
+New to Thoth? The Welcome Wizard introduces you to all features:
+
+- **6 informative slides** covering Search, Input, AI Enhancement, and Export
+- **Automatic first-launch** detection
+- **Quick actions** to add your API key or start exploring
+- **Re-accessible** anytime from Settings or Help menu
 
 ---
 
@@ -128,9 +189,10 @@ Thoth itself is **free and open source**. You only pay for Claude API usage:
 
 | Articles | Estimated Cost |
 | --- | --- |
-| 1 | ~$0.02-0.05 |
-| 10 | ~$0.20-0.50 |
-| 100 | ~$2.00-5.00 |
+| 1 search query | ~$0.01-0.02 |
+| 1 extraction | ~$0.02-0.05 |
+| 10 extractions | ~$0.20-0.50 |
+| 100 extractions | ~$2.00-5.00 |
 
 Cost varies by article length. Built-in cost tracking shows your session total.
 
@@ -141,9 +203,10 @@ Cost varies by article length. Built-in cost tracking shows your session total.
 | Action | Shortcut |
 | --- | --- |
 | New Extraction | `⌘N` |
-| Input Tab | `⌘1` |
-| Extractions Tab | `⌘2` |
-| Activity Log Tab | `⌘3` |
+| Show Search | `⌘1` |
+| Show Input | `⌘2` |
+| Show Extractions | `⌘3` |
+| Show Activity Log | `⌘4` |
 | Settings | `⌘,` |
 | Export Current | `⌘E` |
 | Export All to Folder | `⌘⇧E` |
@@ -174,6 +237,12 @@ Then press `⌘R` in Xcode to build and run.
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Search    │ ──▶ │  Claude AI  │ ──▶ │  Validated  │
+│   Query     │     │  Discovery  │     │  Articles   │
+└─────────────┘     └─────────────┘     └──────┬──────┘
+                                               │
+                                               ▼
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
 │  Wikipedia  │ ──▶ │   Parse &   │ ──▶ │  Claude AI  │
 │     URL     │     │   Extract   │     │  Analysis   │
 └─────────────┘     └─────────────┘     └──────┬──────┘
@@ -184,12 +253,14 @@ Then press `⌘R` in Xcode to build and run.
 └─────────────┘     └─────────────┘     Dates, Locations
 ```
 
-1. **Input** — Enter Wikipedia URLs or article titles
-2. **Fetch** — Download article content from Wikipedia API
-3. **Parse** — Extract HTML content and structure
-4. **Analyze** — Claude AI generates summaries and extracts data
-5. **Display** — Browse results in collapsible sections
-6. **Export** — Save to Markdown or JSON
+1. **Search** — Describe what you're looking for (or skip to step 3)
+2. **Discover** — Claude AI finds relevant Wikipedia articles
+3. **Input** — Enter Wikipedia URLs or article titles
+4. **Fetch** — Download article content from Wikipedia API
+5. **Parse** — Extract HTML content and structure
+6. **Analyze** — Claude AI generates summaries and extracts data
+7. **Display** — Browse results in collapsible sections
+8. **Export** — Save to Markdown or JSON
 
 ---
 
@@ -214,7 +285,7 @@ Thoth/
 ├── Configuration/          # Constants and settings
 ├── Models/                 # Data models
 ├── Services/
-│   ├── AI/                # Claude integration
+│   ├── AI/                # Claude integration + Search
 │   ├── Extraction/        # Extraction engine
 │   ├── Export/            # Export functionality
 │   └── Wikipedia/         # Wikipedia API
@@ -225,6 +296,8 @@ Thoth/
     ├── Extraction/        # Extraction views
     ├── Input/             # Input view
     ├── Logs/              # Activity log
+    ├── Onboarding/        # Welcome Wizard
+    ├── Search/            # Search views
     └── Settings/          # Settings view
 ```
 

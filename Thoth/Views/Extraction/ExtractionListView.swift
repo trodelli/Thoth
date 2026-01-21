@@ -28,6 +28,17 @@ struct ExtractionListView: View {
                 
                 Spacer()
                 
+                // Clear All Button (positioned away from Export to prevent accidental clicks)
+                if !appState.extractions.isEmpty {
+                    Button(action: appState.clearExtractions) {
+                        Text("Clear All")
+                            .font(.caption)
+                            .foregroundColor(.red)
+                    }
+                    .buttonStyle(.plain)
+                    .help("Clear all extractions")
+                }
+                
                 // Sort Toggle
                 if !appState.extractions.isEmpty {
                     Button(action: { appState.sortOldestFirst.toggle() }) {
@@ -52,14 +63,8 @@ struct ExtractionListView: View {
                         Button(action: exportAllToFolder) {
                             Label("Export All to Folder...", systemImage: "folder")
                         }
-                        
-                        Divider()
-                        
-                        Button(role: .destructive, action: appState.clearExtractions) {
-                            Label("Clear All", systemImage: "trash")
-                        }
                     } label: {
-                        Image(systemName: "ellipsis.circle")
+                        Image(systemName: "square.and.arrow.up")
                             .font(.title3)
                     }
                     .menuStyle(.borderlessButton)

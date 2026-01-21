@@ -12,31 +12,68 @@ class AIEnhancementService {
     private let claudeService = ClaudeService()
     private let logger = Logger.shared
     
+    // MARK: - Safe Conversion Helpers
+    
+    /// Safely converts a Double to Int, returning a default value if the Double is NaN or infinite
+    private func safeIntFromDouble(_ value: Double, default defaultValue: Int = 0) -> Int {
+        guard value.isFinite else { return defaultValue }
+        return Int(value)
+    }
+    
+    /// Safely calculates a ratio, returning 0 if the divisor is zero
+    private func safeRatio(_ numerator: Double, _ denominator: Double) -> Double {
+        guard denominator > 0 else { return 0 }
+        let ratio = numerator / denominator
+        return ratio.isFinite ? ratio : 0
+    }
+    
+    /// Validates and clamps the target ratio to acceptable bounds
+    private func validateTargetRatio(_ ratio: Double) -> Double {
+        guard ratio.isFinite else { return AppConstants.Defaults.summaryRatio }
+        return min(max(ratio, AppConstants.Defaults.minSummaryRatio), AppConstants.Defaults.maxSummaryRatio)
+    }
+    
     func enhance(parsed: ParsedWikipediaContent, targetRatio: Double) async throws -> AIEnhancementResult {
         logger.info("Starting AI enhancement for: \(parsed.title)")
         
+        // Validate inputs
+        let validatedRatio = validateTargetRatio(targetRatio)
+        
+        // Guard against empty content
+        guard parsed.wordCount > 0 else {
+            logger.warning("Article has zero word count, returning minimal result")
+            return AIEnhancementResult(
+                summary: parsed.firstParagraph,
+                articleType: .other,
+                keyFacts: [],
+                dates: [],
+                locations: [],
+                relatedTopics: []
+            )
+        }
+        
         // Build context from parsed content
         let fullText = buildFullText(from: parsed)
-        let targetWordCount = Int(Double(parsed.wordCount) * targetRatio)
+        let targetWordCount = safeIntFromDouble(Double(parsed.wordCount) * validatedRatio, default: 100)
         
         // Generate summary
         let summary = try await generateSummary(
             title: parsed.title,
             fullText: fullText,
-            targetWordCount: targetWordCount
+            targetWordCount: max(targetWordCount, 50) // Ensure minimum target
         )
         
-        // NEW: Quality control validation
+        // Quality control validation with safe calculations
         let summaryWordCount = summary.split(separator: " ").count
-        let actualRatio = Double(summaryWordCount) / Double(parsed.wordCount)
-        let targetRatioPercent = Int(targetRatio * 100)
-        let actualRatioPercent = Int(actualRatio * 100)
+        let actualRatio = safeRatio(Double(summaryWordCount), Double(parsed.wordCount))
+        let targetRatioPercent = safeIntFromDouble(validatedRatio * 100, default: 60)
+        let actualRatioPercent = safeIntFromDouble(actualRatio * 100, default: 0)
 
         // Log quality metrics
         logger.info("Summary quality: \(summaryWordCount) words (\(actualRatioPercent)% of original, target was \(targetRatioPercent)%)")
 
         // Warn if severely under target (less than 30% of target)
-        if actualRatio < (targetRatio * 0.3) {
+        if actualRatio < (validatedRatio * 0.3) && actualRatio > 0 {
             logger.warning("Summary significantly shorter than target: \(actualRatioPercent)% vs \(targetRatioPercent)% target")
         }
         
@@ -95,26 +132,44 @@ class AIEnhancementService {
     ) async throws -> (result: AIEnhancementResult, tokens: TokenUsage) {
         logger.info("Starting AI enhancement for: \(parsed.title)")
         
+        // Validate inputs
+        let validatedRatio = validateTargetRatio(targetRatio)
+        
+        // Guard against empty content
+        guard parsed.wordCount > 0 else {
+            logger.warning("Article has zero word count, returning minimal result")
+            let result = AIEnhancementResult(
+                summary: parsed.firstParagraph,
+                articleType: .other,
+                keyFacts: [],
+                dates: [],
+                locations: [],
+                relatedTopics: []
+            )
+            let tokens = TokenUsage(inputTokens: 0, outputTokens: 0)
+            return (result, tokens)
+        }
+        
         // Build context from parsed content
         let fullText = buildFullText(from: parsed)
-        let targetWordCount = Int(Double(parsed.wordCount) * targetRatio)
+        let targetWordCount = safeIntFromDouble(Double(parsed.wordCount) * validatedRatio, default: 100)
         
         // Step 1: Generate summary
         onProgressUpdate?(.generatingSummary)
         let summary = try await generateSummary(
             title: parsed.title,
             fullText: fullText,
-            targetWordCount: targetWordCount
+            targetWordCount: max(targetWordCount, 50) // Ensure minimum target
         )
         
-        // Quality control validation
+        // Quality control validation with safe calculations
         let summaryWordCount = summary.split(separator: " ").count
-        let actualRatio = Double(summaryWordCount) / Double(parsed.wordCount)
-        let targetRatioPercent = Int(targetRatio * 100)
-        let actualRatioPercent = Int(actualRatio * 100)
+        let actualRatio = safeRatio(Double(summaryWordCount), Double(parsed.wordCount))
+        let targetRatioPercent = safeIntFromDouble(validatedRatio * 100, default: 60)
+        let actualRatioPercent = safeIntFromDouble(actualRatio * 100, default: 0)
         logger.info("Summary quality: \(summaryWordCount) words (\(actualRatioPercent)% of original, target was \(targetRatioPercent)%)")
         
-        if actualRatio < (targetRatio * 0.3) {
+        if actualRatio < (validatedRatio * 0.3) && actualRatio > 0 {
             logger.warning("Summary significantly shorter than target: \(actualRatioPercent)% vs \(targetRatioPercent)% target")
         }
         
@@ -172,11 +227,11 @@ class AIEnhancementService {
             relatedTopics: relatedTopics
         )
         
-        // Estimate tokens (rough: ~4 chars per token)
+        // Estimate tokens (rough: ~4 chars per token) with safe calculation
         let inputChars = fullText.count
         let outputChars = summary.count
-        let estimatedInputTokens = inputChars / 4
-        let estimatedOutputTokens = outputChars / 4
+        let estimatedInputTokens = max(inputChars / 4, 0)
+        let estimatedOutputTokens = max(outputChars / 4, 0)
         
         let tokens = TokenUsage(
             inputTokens: estimatedInputTokens,
@@ -189,29 +244,36 @@ class AIEnhancementService {
     // MARK: - Summary Generation
     
     private func generateSummary(title: String, fullText: String, targetWordCount: Int) async throws -> String {
-        // Smart length requirements based on article size
+        // Ensure we have valid target word count
+        let safeTargetWordCount = max(targetWordCount, 50)
+        
+        // Smart length requirements based on article size with safe calculations
         let minWordCount: Int
         let maxWordCount: Int
         
         // For short articles, use different thresholds
-        if targetWordCount < 500 {
+        if safeTargetWordCount < 500 {
             // Short articles: be more lenient
-            minWordCount = Int(Double(targetWordCount) * 0.5)  // 50% minimum
-            maxWordCount = Int(Double(targetWordCount) * 1.5)  // 150% maximum
+            minWordCount = safeIntFromDouble(Double(safeTargetWordCount) * 0.5, default: 25)  // 50% minimum
+            maxWordCount = safeIntFromDouble(Double(safeTargetWordCount) * 1.5, default: 750)  // 150% maximum
         } else {
             // Long articles: enforce 30% minimum quality control
-            minWordCount = Int(Double(targetWordCount) * 0.3)  // 30% minimum
-            maxWordCount = Int(Double(targetWordCount) * 1.2)  // 120% maximum
+            minWordCount = safeIntFromDouble(Double(safeTargetWordCount) * 0.3, default: 150)  // 30% minimum
+            maxWordCount = safeIntFromDouble(Double(safeTargetWordCount) * 1.2, default: 600)  // 120% maximum
         }
+        
+        // Ensure minimum bounds are sensible
+        let finalMinWordCount = max(minWordCount, 25)
+        let finalMaxWordCount = max(maxWordCount, finalMinWordCount + 50)
         
         let prompt = """
         Create a comprehensive, detailed summary of the Wikipedia article about "\(title)".
         
         CRITICAL LENGTH REQUIREMENTS:
-        - Target length: \(targetWordCount) words
-        - Minimum acceptable: \(minWordCount) words  
-        - Maximum acceptable: \(maxWordCount) words
-        - Your summary MUST be between \(minWordCount) and \(maxWordCount) words
+        - Target length: \(safeTargetWordCount) words
+        - Minimum acceptable: \(finalMinWordCount) words  
+        - Maximum acceptable: \(finalMaxWordCount) words
+        - Your summary MUST be between \(finalMinWordCount) and \(finalMaxWordCount) words
         
         CONTENT REQUIREMENTS:
         - Preserve important details, context, and nuance
@@ -225,66 +287,56 @@ class AIEnhancementService {
         STYLE GUIDELINES:
         - Use clear, accessible academic language
         - Maintain encyclopedic tone
-        - Structure content logically with clear paragraphs
-        - Focus on factual accuracy
+        - Write in flowing paragraphs, not bullet points
+        - Do not include section headings
         
-        Article text (first 15,000 characters):
-        \(String(fullText.prefix(15000)))
+        Article content:
+        \(fullText.prefix(15000))
         
-        Provide ONLY the summary with NO preamble, explanation, or meta-commentary.
-        Remember: Your summary must be AT LEAST \(minWordCount) words to preserve sufficient detail.
+        Provide only the summary text, no preamble or meta-commentary.
         """
         
-        let system = """
-        You are an expert at creating comprehensive, detailed summaries of Wikipedia articles.
-        You preserve important information, context, and nuance while eliminating only redundancy.
-        You ALWAYS meet the specified word count targets to ensure adequate detail preservation.
-        You write in an encyclopedic style suitable for academic reference.
-        """
+        let response = try await claudeService.generateCompletion(prompt: prompt)
         
-        return try await claudeService.generateCompletion(
-            prompt: prompt,
-            system: system,
-            maxTokens: AppConstants.Claude.summaryMaxTokens
-        )
+        return response.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     // MARK: - Article Classification
     
     private func classifyArticle(title: String, summary: String, categories: [String]) async throws -> ArticleType {
         let prompt = """
-        Classify this Wikipedia article into ONE of these categories:
-        - Person: Biographical articles about individuals
-        - Place: Geographic locations (cities, countries, landmarks)
-        - Event: Historical events, battles, incidents
-        - Concept: Abstract ideas, philosophies, theories
-        - Theory: Scientific or academic theories
-        - Organization: Companies, institutions, groups
-        - Object: Physical objects, artifacts, inventions
-        - Work: Creative works (books, films, art)
-        - Period: Historical time periods, eras
-        - Other: Anything that doesn't fit above
+        Classify this Wikipedia article into exactly ONE of these categories:
+        - person (biography of a person)
+        - place (geographic location, landmark)
+        - event (historical event, battle, disaster)
+        - concept (abstract idea, theory, philosophy)
+        - theory (scientific theory, philosophical theory)
+        - organization (company, institution, group)
+        - work (book, film, artwork, music)
+        - object (physical thing, technology, invention)
+        - period (historical period, era)
+        - other (if none of the above fit)
         
         Article: "\(title)"
-        Summary: \(summary)
         Categories: \(categories.prefix(5).joined(separator: ", "))
+        Summary excerpt: \(summary.prefix(500))
         
-        Respond with ONLY the category name (e.g., "Person" or "Place"), nothing else.
+        Respond with ONLY the category name, nothing else.
         """
         
         let response = try await claudeService.generateCompletion(prompt: prompt)
-        let cleaned = response.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        // Map response to ArticleType
-        switch cleaned.lowercased() {
+        let typeString = response.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        switch typeString {
         case "person": return .person
         case "place": return .place
         case "event": return .event
         case "concept": return .concept
         case "theory": return .theory
         case "organization": return .organization
-        case "object": return .object
         case "work": return .work
+        case "object": return .object
         case "period": return .period
         default: return .other
         }
@@ -294,7 +346,7 @@ class AIEnhancementService {
     
     private func extractKeyFacts(title: String, fullText: String, infobox: Infobox?) async throws -> [KeyFact] {
         var prompt = """
-        Extract the 5-10 most important key facts about "\(title)".
+        Extract the most important facts about "\(title)" as key-value pairs.
         
         Format each fact as:
         Key: Value
@@ -403,6 +455,9 @@ class AIEnhancementService {
     
     private func buildFullText(from parsed: ParsedWikipediaContent) -> String {
         var text = parsed.firstParagraph + "\n\n"
+        
+        // Guard against zero word count
+        guard parsed.wordCount > 0 else { return text }
         
         // Adaptive section inclusion based on article length
         let sectionCount: Int

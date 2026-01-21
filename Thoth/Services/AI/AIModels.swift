@@ -62,6 +62,18 @@ struct ClaudeUsage: Codable {
     }
 }
 
+// MARK: - Claude Completion Result (with token usage)
+
+struct ClaudeCompletionResult {
+    let text: String
+    let inputTokens: Int
+    let outputTokens: Int
+    
+    var totalTokens: Int {
+        inputTokens + outputTokens
+    }
+}
+
 // MARK: - AI Enhancement Result
 
 struct AIEnhancementResult {

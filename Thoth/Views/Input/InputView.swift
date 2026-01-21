@@ -131,24 +131,28 @@ struct InputView: View {
                     // AI Enhancement
                     VStack(alignment: .leading, spacing: 8) {
                         Toggle(isOn: $appState.aiEnabled) {
-                            VStack(alignment: .leading, spacing: 4) {
-                                HStack {
-                                    Text("AI Enhancement")
+                            HStack(spacing: 10) {
+                                // AI-Enhanced badge (matching Search tab style)
+                                HStack(spacing: 4) {
+                                    Image(systemName: "brain")
+                                        .font(.caption)
+                                    Text("AI-Enhanced")
+                                        .font(.caption)
                                         .fontWeight(.medium)
-                                    
-                                    if appState.aiEnabled {
-                                        Image(systemName: "sparkles")
-                                            .foregroundColor(.purple)
-                                            .imageScale(.small)
-                                    }
                                 }
-                                
-                                Text("Uses Claude API for intelligent summaries, classification, and key fact extraction")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 5)
+                                .background(Color.purple.opacity(appState.aiEnabled ? 0.15 : 0.08))
+                                .foregroundColor(appState.aiEnabled ? .purple : .secondary)
+                                .cornerRadius(12)
                             }
                         }
                         .disabled(!KeychainManager.shared.hasAPIKey(for: .anthropic))
+                        
+                        Text("Uses Claude API for intelligent summaries, classification, and key fact extraction")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 2)
                         
                         if !KeychainManager.shared.hasAPIKey(for: .anthropic) {
                             HStack {
@@ -292,6 +296,25 @@ struct InputView: View {
             .padding(24)
         }
         .navigationTitle("Input")
+        .onAppear {
+            // Check for pending URLs from search
+            consumePendingSearchURLs()
+        }
+        .onChange(of: appState.pendingSearchURLs) { oldURLs, newURLs in
+            // Also handle if URLs are added while view is visible
+            if !newURLs.isEmpty {
+                consumePendingSearchURLs()
+            }
+        }
+    }
+    
+    // MARK: - Consume Pending Search URLs
+    
+    private func consumePendingSearchURLs() {
+        let pendingURLs = appState.consumePendingSearchURLs()
+        if !pendingURLs.isEmpty {
+            viewModel.addURLs(pendingURLs)
+        }
     }
     
     @ViewBuilder

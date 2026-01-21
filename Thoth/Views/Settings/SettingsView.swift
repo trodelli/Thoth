@@ -50,7 +50,7 @@ struct SettingsView: View {
             }
             .padding(.top, 8)
         }
-        .frame(width: 600, height: 500)
+        .frame(width: 650, height: 580)
     }
 }
 
@@ -109,6 +109,35 @@ struct GeneralSettingsView: View {
                                 Text(format.rawValue).tag(format.rawValue)
                             }
                         }
+                    }
+                    .padding(8)
+                }
+                
+                GroupBox("Help & Support") {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Button(action: {
+                            // Close Settings sheet first
+                            appState.showSettings = false
+                            // Then open Welcome Wizard after a brief delay
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                appState.showWelcomeWizard = true
+                            }
+                        }) {
+                            HStack {
+                                Image(systemName: "questionmark.circle")
+                                    .foregroundColor(.blue)
+                                Text("Show Welcome Tour")
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.secondary)
+                                    .font(.caption)
+                            }
+                        }
+                        .buttonStyle(.plain)
+                        
+                        Text("Review the introduction to Thoth's features")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
                     .padding(8)
                 }

@@ -8,6 +8,32 @@
 
 import Foundation
 
+/// Lightweight preview data for an article (fetched via Wikipedia API)
+struct ArticlePreviewData {
+    let title: String
+    let extract: String
+    let categories: [String]
+    let thumbnail: URL?
+    let pageURL: URL
+    
+    /// Formatted categories for display (max 5)
+    var displayCategories: [String] {
+        Array(categories.prefix(5))
+    }
+    
+    /// Truncated extract for preview
+    var shortExtract: String {
+        if extract.count <= 300 {
+            return extract
+        }
+        let truncated = String(extract.prefix(300))
+        if let lastPeriod = truncated.lastIndex(of: ".") {
+            return String(truncated[...lastPeriod])
+        }
+        return truncated + "..."
+    }
+}
+
 class WikipediaService: WikipediaServiceProtocol {
     private let session: URLSession
     private let logger = Logger.shared
@@ -47,6 +73,99 @@ class WikipediaService: WikipediaServiceProtocol {
             throw NetworkError.unexpectedStatus(httpResponse.statusCode)
         }
     }
+    
+    // MARK: - Article Preview (Lightweight fetch for search results)
+    
+    /// Fetch lightweight preview data for an article (extract + categories)
+    /// This is much faster than fetching the full article and costs nothing (no AI)
+    func fetchArticlePreview(title: String) async throws -> ArticlePreviewData {
+        let apiURL = buildPreviewAPIURL(title: title)
+        
+        var request = URLRequest(url: apiURL)
+        request.setValue(AppConstants.Wikipedia.userAgent, forHTTPHeaderField: "User-Agent")
+        request.timeoutInterval = 10 // Quick timeout for preview
+        
+        let (data, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode == 200 else {
+            throw NetworkError.invalidResponse
+        }
+        
+        return try parsePreviewResponse(data: data, title: title)
+    }
+    
+    /// Build API URL for preview (extracts + categories + thumbnail)
+    private func buildPreviewAPIURL(title: String) -> URL {
+        var components = URLComponents(string: AppConstants.Wikipedia.baseURL)!
+        components.queryItems = [
+            URLQueryItem(name: "action", value: "query"),
+            URLQueryItem(name: "format", value: "json"),
+            URLQueryItem(name: "formatversion", value: "2"),
+            URLQueryItem(name: "titles", value: title),
+            URLQueryItem(name: "prop", value: "extracts|categories|pageimages|info"),
+            URLQueryItem(name: "exintro", value: "true"),           // Only intro section
+            URLQueryItem(name: "explaintext", value: "true"),       // Plain text, no HTML
+            URLQueryItem(name: "exsentences", value: "4"),          // First 4 sentences
+            URLQueryItem(name: "cllimit", value: "10"),             // Max 10 categories
+            URLQueryItem(name: "clshow", value: "!hidden"),         // Exclude hidden categories
+            URLQueryItem(name: "piprop", value: "thumbnail"),       // Get thumbnail
+            URLQueryItem(name: "pithumbsize", value: "200"),        // Thumbnail size
+            URLQueryItem(name: "inprop", value: "url"),             // Get page URL
+            URLQueryItem(name: "redirects", value: "true"),
+            URLQueryItem(name: "origin", value: "*")
+        ]
+        return components.url!
+    }
+    
+    /// Parse preview response
+    private func parsePreviewResponse(data: Data, title: String) throws -> ArticlePreviewData {
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let query = json["query"] as? [String: Any],
+              let pages = query["pages"] as? [[String: Any]],
+              let page = pages.first else {
+            throw ParsingError.missingContent
+        }
+        
+        // Check if page is missing
+        if page["missing"] != nil {
+            throw NetworkError.articleNotFound(title)
+        }
+        
+        let pageTitle = page["title"] as? String ?? title
+        let extract = page["extract"] as? String ?? ""
+        
+        // Parse categories
+        var categories: [String] = []
+        if let cats = page["categories"] as? [[String: Any]] {
+            categories = cats.compactMap { cat in
+                guard let catTitle = cat["title"] as? String else { return nil }
+                // Remove "Category:" prefix
+                return catTitle.replacingOccurrences(of: "Category:", with: "")
+            }
+        }
+        
+        // Parse thumbnail
+        var thumbnail: URL? = nil
+        if let thumbInfo = page["thumbnail"] as? [String: Any],
+           let thumbSource = thumbInfo["source"] as? String {
+            thumbnail = URL(string: thumbSource)
+        }
+        
+        // Parse page URL
+        let pageURLString = page["fullurl"] as? String ?? "https://en.wikipedia.org/wiki/\(title.replacingOccurrences(of: " ", with: "_"))"
+        let pageURL = URL(string: pageURLString) ?? URL(string: "https://en.wikipedia.org")!
+        
+        return ArticlePreviewData(
+            title: pageTitle,
+            extract: extract,
+            categories: categories,
+            thumbnail: thumbnail,
+            pageURL: pageURL
+        )
+    }
+    
+    // MARK: - Private Methods
     
     private func buildAPIURL(title: String) -> URL {
         var components = URLComponents(string: AppConstants.Wikipedia.baseURL)!

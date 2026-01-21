@@ -16,6 +16,17 @@ struct ThothApp: App {
         WindowGroup {
             MainView()
                 .environmentObject(appState)
+                .sheet(isPresented: $appState.showWelcomeWizard) {
+                    WelcomeWizardView()
+                        .environmentObject(appState)
+                        .interactiveDismissDisabled() // Prevent accidental dismiss
+                }
+                .onAppear {
+                    // Show Welcome Wizard on first launch
+                    if !appState.hasCompletedOnboarding {
+                        appState.showWelcomeWizard = true
+                    }
+                }
         }
         .windowStyle(.automatic)
         .defaultSize(width: 1400, height: 900)
@@ -93,6 +104,13 @@ struct ThothApp: App {
                 }
                 .keyboardShortcut("k", modifiers: .command)
                 .disabled(appState.extractions.isEmpty)
+            }
+            
+            // Help menu
+            CommandGroup(replacing: .help) {
+                Button("Show Welcome Tour") {
+                    appState.showWelcomeWizard = true
+                }
             }
         }
     }

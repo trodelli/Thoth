@@ -269,7 +269,7 @@ struct ExtractionDetailView: View {
                     title: "Infobox",
                     subtitle: infobox.type ?? "Data",
                     icon: "tablecells",
-                    isExpandedByDefault: false
+                    isExpandedByDefault: expandAll
                 ) {
                     VStack(alignment: .leading, spacing: 8) {
                         ForEach(infobox.fields, id: \.key) { field in
@@ -294,7 +294,7 @@ struct ExtractionDetailView: View {
                     title: "Tables",
                     subtitle: "\(extraction.structuredContent.tables.count) tables",
                     icon: "tablecells.fill",
-                    isExpandedByDefault: false
+                    isExpandedByDefault: expandAll
                 ) {
                     VStack(alignment: .leading, spacing: 16) {
                         ForEach(Array(extraction.structuredContent.tables.enumerated()), id: \.offset) { index, table in
@@ -310,7 +310,7 @@ struct ExtractionDetailView: View {
                     title: "Article Sections",
                     subtitle: "\(extraction.structuredContent.sections.count) sections",
                     icon: "doc.plaintext",
-                    isExpandedByDefault: false
+                    isExpandedByDefault: expandAll
                 ) {
                     VStack(alignment: .leading, spacing: 12) {
                         ForEach(extraction.structuredContent.sections, id: \.title) { section in
@@ -346,7 +346,7 @@ struct ExtractionDetailView: View {
                     title: "Categories",
                     subtitle: "\(extraction.classification.categories.count) categories",
                     icon: "tag.fill",
-                    isExpandedByDefault: false
+                    isExpandedByDefault: expandAll
                 ) {
                     FlowLayout(spacing: 8) {
                         ForEach(extraction.classification.categories, id: \.self) { category in
@@ -368,7 +368,7 @@ struct ExtractionDetailView: View {
                     title: "Related Topics",
                     subtitle: "\(extraction.classification.relatedTopics.count) topics",
                     icon: "link",
-                    isExpandedByDefault: false
+                    isExpandedByDefault: expandAll
                 ) {
                     FlowLayout(spacing: 8) {
                         ForEach(extraction.classification.relatedTopics, id: \.self) { topic in
